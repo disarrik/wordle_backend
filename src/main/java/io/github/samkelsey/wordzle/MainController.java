@@ -1,5 +1,6 @@
 package io.github.samkelsey.wordzle;
 
+import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,11 @@ import javax.servlet.http.HttpSession;
 public class MainController {
 
     private final String SESSION_ATTRIBUTE = "USER_DATA";
+    private final ResetTargetWordTask resetTargetWordTask;
+
+    public MainController(ResetTargetWordTask resetTargetWordTask) {
+        this.resetTargetWordTask = resetTargetWordTask;
+    }
 
     @GetMapping("/getSessionData")
     public ResponseEntity<SessionModel> getSessionData(HttpSession session) {
@@ -21,15 +27,22 @@ public class MainController {
     }
 
     @PostMapping("/submitGuess")
-    public void submitGuess(@RequestBody RequestDto dto, HttpServletRequest request) {
+    public ResponseEntity<SessionModel> submitGuess(@RequestBody RequestDto dto, HttpServletRequest request) {
         SessionModel session = (SessionModel) request.getSession().getAttribute(SESSION_ATTRIBUTE);
 
         if (session == null) {
             session = new SessionModel();
         }
 
-        session.getGuesses().add(dto.getGuess());
+        String guess = dto.getGuess();
+        session.getGuesses().add(guess);
+
+        if (guess.equals(resetTargetWordTask.getTargetWord())) {
+            session.setHasAnsweredCorrectly(true);
+        }
+
         request.getSession().setAttribute(SESSION_ATTRIBUTE, session);
 
+        return ResponseEntity.ok().body(session);
     }
 }
