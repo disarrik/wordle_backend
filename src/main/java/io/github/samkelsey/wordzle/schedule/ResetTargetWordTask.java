@@ -12,16 +12,16 @@ public class ResetTargetWordTask {
     Logger logger = LoggerFactory.getLogger(ResetTargetWordTask.class);
     private String targetWord;
 
-    @Scheduled(fixedDelay = 5 * 1000)
+    @Scheduled(fixedDelay = 5 * 60 * 1000)
     public void resetWord() {
-        logger.info("Resetting word");
+//        logger.info("Resetting word");
 
         RestTemplate restTemplate = new RestTemplate();
         final String uri = "https://random-word-api.herokuapp.com/word";
         String result = restTemplate.getForObject(uri, String.class);
 //        targetWord = result.substring(2, result.length() - 2);
         targetWord = "owl";
-        logger.info("Target word reset to \"{}\"", targetWord);
+//        logger.info("Target word reset to \"{}\"", targetWord);
     }
 
     public String getTargetWord() {
