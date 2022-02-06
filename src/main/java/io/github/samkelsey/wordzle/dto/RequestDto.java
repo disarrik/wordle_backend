@@ -1,10 +1,12 @@
 package io.github.samkelsey.wordzle.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class RequestDto {
 
     @NotNull(message = "guess is a mandatory field.")

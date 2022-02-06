@@ -24,7 +24,7 @@ public class MainController {
 
     public MainController(GuessService guessService) {
         this.guessService = guessService;
-}
+    }
 
     @PostMapping("/submitGuess")
     public ResponseEntity<ResponseDto> submitGuess(@RequestBody @Valid RequestDto dto, HttpServletRequest request) {
@@ -33,18 +33,5 @@ public class MainController {
         ResponseDto response = guessService.makeGuess(session, dto);
 
         return ResponseEntity.ok(response);
-
-
-//        String guess = dto.getGuess();
-//        session.getGuesses().add(guess);
-//        session.setLives(session.getLives() - 1);
-
-//        if (guess.equals(resetTargetWordTask.getTargetWord())) {
-//            return ResponseEntity.ok().body(new ResponseDto(true, session));
-//        }
-
-//        request.getSession().setAttribute(SESSION_ATTRIBUTE, session);
-
-//        return ResponseEntity.ok().body(new ResponseDto(false, session));
     }
 }
