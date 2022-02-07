@@ -1,0 +1,10 @@
+spring:
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    database: 0
+    port: 6379
+reset-word-task:
+  url: "https://random-word-api.herokuapp.com/word"
+  delay: 30000

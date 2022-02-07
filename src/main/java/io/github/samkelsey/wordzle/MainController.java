@@ -6,6 +6,7 @@ import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
 import io.github.samkelsey.wordzle.service.GuessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class MainController {
         this.guessService = guessService;
     }
 
-    @PostMapping("/submitGuess")
+    @PostMapping(value = "/submitGuess")
     public ResponseEntity<ResponseDto> submitGuess(@RequestBody @Valid RequestDto dto, HttpServletRequest request) {
         LOGGER.info("Processing request for a guess of: {}", dto.getGuess());
         HttpSession session = request.getSession();
