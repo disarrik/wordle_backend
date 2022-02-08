@@ -1,16 +1,28 @@
 package io.github.samkelsey.wordzle;
 
-import io.github.samkelsey.wordzle.config.EmbeddedRedisTestConfiguration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import redis.embedded.RedisServer;
 
 @SpringBootTest
-@Import(EmbeddedRedisTestConfiguration.class)
 class WordzleApplicationTests {
+
+	private static final RedisServer redisServer = new RedisServer();
+
+	@BeforeAll
+	public static void before() {
+		redisServer.start();
+	}
 
 	@Test
 	void contextLoads() {
+	}
+
+	@AfterAll
+	public static void after() {
+		redisServer.stop();
 	}
 
 }

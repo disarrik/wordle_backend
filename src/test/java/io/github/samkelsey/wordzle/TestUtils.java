@@ -1,5 +1,6 @@
 package io.github.samkelsey.wordzle;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.samkelsey.wordzle.UserDataModel;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 
@@ -26,5 +27,14 @@ public class TestUtils {
 
     public static RequestDto createSampleRequestDto() {
         return new RequestDto("parrot");
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
