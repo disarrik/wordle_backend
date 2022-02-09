@@ -7,4 +7,4 @@ spring:
     port: 6379
 reset-word-task:
   url: "https://random-word-api.herokuapp.com/word"
-  delay: 10000
+  delay: 100000

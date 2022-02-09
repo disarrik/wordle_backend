@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ResetTargetWordTask {
 
     Logger LOGGER = LoggerFactory.getLogger(ResetTargetWordTask.class);
-    private String targetWord = "owl";
+    private String targetWord;
     private long targetWordCreationTime;
 
     @Value("${reset-word-task.url}")
@@ -25,9 +25,9 @@ public class ResetTargetWordTask {
     public void resetWord() {
         try {
             LOGGER.info("Resetting word");
-//            RestTemplate restTemplate = new RestTemplate();
-//            String result = restTemplate.getForObject(url, String.class);
-//            targetWord = result.substring(2, result.length() - 2);
+            RestTemplate restTemplate = new RestTemplate();
+            String result = restTemplate.getForObject(url, String.class);
+            targetWord = result.substring(2, result.length() - 2);
             targetWordCreationTime = Instant.now().toEpochMilli();
             LOGGER.info("Target word reset to \"{}\"", targetWord);
 
