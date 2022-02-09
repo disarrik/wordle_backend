@@ -8,11 +8,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Component
 public class ResetTargetWordTask {
 
     Logger LOGGER = LoggerFactory.getLogger(ResetTargetWordTask.class);
-    private String targetWord;
+    private String targetWord = "owl";
+    private long targetWordCreationTime;
 
     @Value("${reset-word-task.url}")
     private String url;
@@ -21,18 +25,22 @@ public class ResetTargetWordTask {
     public void resetWord() {
         try {
             LOGGER.info("Resetting word");
-            RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(url, String.class);
-            targetWord = result.substring(2, result.length() - 2);
+//            RestTemplate restTemplate = new RestTemplate();
+//            String result = restTemplate.getForObject(url, String.class);
+//            targetWord = result.substring(2, result.length() - 2);
+            targetWordCreationTime = Instant.now().toEpochMilli();
             LOGGER.info("Target word reset to \"{}\"", targetWord);
-            // TODO: Wipe all session data so users are back to the start.
+
         } catch (RestClientException ex) {
-            targetWord = "owl";
-            LOGGER.info("Couldn't reach word api. Setting target word to \"{}\"", targetWord);
+            LOGGER.info("Failed to reset target word. Couldn't reach word api, will try again soon.");
         }
     }
 
     public String getTargetWord() {
         return targetWord;
+    }
+
+    public long getTargetWordCreationTime() {
+        return targetWordCreationTime;
     }
 }

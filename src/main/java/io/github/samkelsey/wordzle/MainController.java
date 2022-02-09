@@ -21,18 +21,31 @@ import javax.validation.Valid;
 public class MainController {
 
     private final GuessService guessService;
+    private final ResetTargetWordTask resetTargetWordTask;
     private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
-    public MainController(GuessService guessService) {
+    public MainController(GuessService guessService, ResetTargetWordTask resetTargetWordTask) {
         this.guessService = guessService;
+        this.resetTargetWordTask = resetTargetWordTask;
     }
 
     @PostMapping(value = "/submitGuess")
     public ResponseEntity<ResponseDto> submitGuess(@RequestBody @Valid RequestDto dto, HttpServletRequest request) {
         LOGGER.info("Processing request for a guess of: {}", dto.getGuess());
-        HttpSession session = request.getSession();
+        HttpSession session = getSession(request);
         ResponseDto response = guessService.makeGuess(session, dto);
 
         return ResponseEntity.ok(response);
+    }
+
+    private HttpSession getSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        if (session.getCreationTime() < resetTargetWordTask.getTargetWordCreationTime()) {
+            session.invalidate();
+            session = request.getSession();
+        }
+
+        return session;
     }
 }
