@@ -1,23 +1,28 @@
 package io.github.samkelsey.wordzle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.samkelsey.wordzle.UserDataModel;
+import com.flextrade.jfixture.JFixture;
+import io.github.samkelsey.wordzle.dto.ResponseDto;
+import io.github.samkelsey.wordzle.model.Guess;
+import io.github.samkelsey.wordzle.model.UserData;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.samkelsey.wordzle.GameStatus.PLAYING;
+import static io.github.samkelsey.wordzle.model.GameStatus.PLAYING;
 
 public class TestUtils {
 
-    public static UserDataModel createSampleUserData() {
-        List<String> guesses = new ArrayList<>();
-        guesses.add("cat");
-        guesses.add("dog");
-        guesses.add("snake");
+    public static final JFixture jFixture = new JFixture();
 
-        UserDataModel userData = new UserDataModel();
+    public static UserData createSampleUserData() {
+        List<Guess> guesses = new ArrayList<>();
+        guesses.add(jFixture.create(Guess.class));
+        guesses.add(jFixture.create(Guess.class));
+        guesses.add(jFixture.create(Guess.class));
+
+        UserData userData = new UserData();
         userData.setGameStatus(PLAYING);
         userData.setLives(5);
         userData.setGuesses(guesses);

@@ -1,9 +1,10 @@
-package io.github.samkelsey.wordzle.service;
+package io.github.samkelsey.wordzle.controller;
 
-import io.github.samkelsey.wordzle.MainController;
 import io.github.samkelsey.wordzle.TestUtils;
+import io.github.samkelsey.wordzle.controller.MainController;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
+import io.github.samkelsey.wordzle.service.GuessService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -25,9 +25,10 @@ public class ResetTargetWordTask {
     public void resetWord() {
         try {
             LOGGER.info("Resetting word");
-            RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(url, String.class);
-            targetWord = result.substring(2, result.length() - 2);
+//            RestTemplate restTemplate = new RestTemplate();
+//            String result = restTemplate.getForObject(url, String.class);
+//            targetWord = result.substring(2, result.length() - 2);
+            targetWord = "owlss";
             targetWordCreationTime = Instant.now().toEpochMilli();
             LOGGER.info("Target word reset to \"{}\"", targetWord);
 

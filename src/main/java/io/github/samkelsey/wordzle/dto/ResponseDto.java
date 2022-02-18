@@ -3,8 +3,9 @@ package io.github.samkelsey.wordzle.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.samkelsey.wordzle.GameStatus;
-import io.github.samkelsey.wordzle.UserDataModel;
+import io.github.samkelsey.wordzle.model.GameStatus;
+import io.github.samkelsey.wordzle.model.Guess;
+import io.github.samkelsey.wordzle.model.UserData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,18 +22,18 @@ public class ResponseDto {
     @JsonProperty("guess-is-correct")
     private Boolean guessIsCorrect;
 
-    private List<String> guesses;
+    private List<Guess> guesses;
 
     private int lives;
 
-    public ResponseDto(UserDataModel userData) {
+    public ResponseDto(UserData userData) {
         this.gameStatus = userData.getGameStatus();
         this.guessIsCorrect = null;
         this.guesses = userData.getGuesses();
         this.lives = userData.getLives();
     }
 
-    public ResponseDto(boolean guessIsCorrect, UserDataModel userData) {
+    public ResponseDto(boolean guessIsCorrect, UserData userData) {
         this.gameStatus = userData.getGameStatus();
         this.guessIsCorrect = guessIsCorrect;
         this.guesses = userData.getGuesses();
