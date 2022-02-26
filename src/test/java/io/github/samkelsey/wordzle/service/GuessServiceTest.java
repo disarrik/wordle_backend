@@ -7,6 +7,7 @@ import io.github.samkelsey.wordzle.model.UserData;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,28 +44,30 @@ public class GuessServiceTest {
     @InjectMocks
     private GuessService guessService;
 
+    private RequestDto dto;
+    private UserData userData;
+
+    @BeforeEach
+    public void init() {
+        dto = TestUtils.createSampleRequestDto();
+        userData = TestUtils.createSampleUserData();
+    }
+
     @Test
     void whenCorrectGuess_shouldGameOver() {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        HttpSession sessionMock = mock(HttpSession.class);
-        when(sessionMock.getAttribute(anyString())).thenReturn(TestUtils.createSampleUserData());
         when(resetTargetWordTask.getTargetWord()).thenReturn(dto.getGuess());
 
-        ResponseDto responseDto = guessService.makeGuess(sessionMock, dto);
+        ResponseDto responseDto = guessService.makeGuess(userData, dto);
 
         assertEquals(WON, responseDto.getGameStatus());
     }
 
     @Test
     void whenMakeGuess_shouldDeductLife() {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        UserData userDataMock = TestUtils.createSampleUserData();
-        HttpSession sessionMock = mock(HttpSession.class);
-        when(sessionMock.getAttribute(anyString())).thenReturn(userDataMock);
         when(resetTargetWordTask.getTargetWord()).thenReturn("foo");
-        int initialLives = userDataMock.getLives();
+        int initialLives = userData.getLives();
 
-        int lives = guessService.makeGuess(sessionMock, dto).getLives();
+        int lives = guessService.makeGuess(userData, dto).getLives();
 
         assertEquals(initialLives, lives + 1);
     }
@@ -72,11 +75,11 @@ public class GuessServiceTest {
     @Test
     void whenMakeGuess_shouldEvaluateGuess() {
         RequestDto dto = new RequestDto("motfs");
-        HttpSession sessionMock = mock(HttpSession.class);
         when(resetTargetWordTask.getTargetWord()).thenReturn("forks");
 
-        Guess result = guessService.makeGuess(sessionMock, dto).getGuesses().get(0);
+        List<Guess> guesses = guessService.makeGuess(userData, dto).getGuesses();
 
+        Guess result = guesses.get(guesses.size() - 1);
         Guess expected = new Guess(
                 "motfs",
                 Arrays.asList(1, 4),
@@ -89,42 +92,21 @@ public class GuessServiceTest {
 
     @Test
     void whenMakeGuess_shouldAddGuess() {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        HttpSession sessionMock = mock(HttpSession.class);
-        UserData userDataMock = TestUtils.createSampleUserData();
-        when(sessionMock.getAttribute(anyString())).thenReturn(userDataMock);
         when(resetTargetWordTask.getTargetWord()).thenReturn(dto.getGuess());
-        List<Guess> initialGuesses = new ArrayList<>(userDataMock.getGuesses());
+        List<Guess> initialGuesses = new ArrayList<>(userData.getGuesses());
 
-        List<Guess> guesses = guessService.makeGuess(sessionMock, dto).getGuesses();
+        List<Guess> guesses = guessService.makeGuess(userData, dto).getGuesses();
 
         assertEquals(initialGuesses.size() + 1, guesses.size());
         assertEquals(dto.getGuess(), guesses.get(guesses.size() - 1).getGuess());
     }
 
     @Test
-    void whenMakeGuess_shouldUpdateSession() {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        HttpSession sessionMock = mock(HttpSession.class);
-        UserData userDataMock = TestUtils.createSampleUserData();
-        when(sessionMock.getAttribute(anyString())).thenReturn(userDataMock);
-        when(resetTargetWordTask.getTargetWord()).thenReturn("foo");
-
-        guessService.makeGuess(sessionMock, dto);
-
-        verify(sessionMock, times(1)).setAttribute(anyString(), any(UserData.class));
-    }
-
-    @Test
     void whenOutOfLives_shouldGameOver() {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        UserData userDataMock = TestUtils.createSampleUserData();
-        userDataMock.setLives(0);
-        HttpSession sessionMock = mock(HttpSession.class);
-        when(sessionMock.getAttribute(anyString())).thenReturn(userDataMock);
+        userData.setLives(0);
         when(resetTargetWordTask.getTargetWord()).thenReturn("foo");
 
-        ResponseDto response = guessService.makeGuess(sessionMock, dto);
+        ResponseDto response = guessService.makeGuess(userData, dto);
 
         assertEquals(LOST, response.getGameStatus());
     }
@@ -132,27 +114,10 @@ public class GuessServiceTest {
     @ParameterizedTest
     @EnumSource(value = GameStatus.class, names = {"WON", "LOST"})
     void whenGameOver_shouldReturnOnlyUserData(GameStatus gameStatus) {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        UserData userDataMock = TestUtils.createSampleUserData();
-        userDataMock.setGameStatus(gameStatus);
-        HttpSession sessionMock = mock(HttpSession.class);
-        when(sessionMock.getAttribute(anyString())).thenReturn(userDataMock);
+        userData.setGameStatus(gameStatus);
 
-        ResponseDto response = guessService.makeGuess(sessionMock, dto);
+        ResponseDto response = guessService.makeGuess(userData, dto);
 
         assertNull(response.getGuessIsCorrect());
-    }
-
-    @Test
-    void whenSessionIsNull_newSessionCreated() {
-        RequestDto dto = TestUtils.createSampleRequestDto();
-        HttpSession sessionMock = mock(HttpSession.class);
-        when(sessionMock.getAttribute(anyString())).thenReturn(null);
-        when(resetTargetWordTask.getTargetWord()).thenReturn("foo");
-
-        ResponseDto response = guessService.makeGuess(sessionMock, dto);
-
-        assertNotNull(response.getGuesses());
-        assertEquals(PLAYING, response.getGameStatus());
     }
 }

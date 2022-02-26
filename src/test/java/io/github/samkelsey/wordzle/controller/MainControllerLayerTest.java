@@ -1,29 +1,23 @@
 package io.github.samkelsey.wordzle.controller;
 
 import io.github.samkelsey.wordzle.TestUtils;
-import io.github.samkelsey.wordzle.controller.MainController;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
 import io.github.samkelsey.wordzle.service.GuessService;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import redis.embedded.RedisServer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(SpringExtension.class)

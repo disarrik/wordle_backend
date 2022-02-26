@@ -18,15 +18,13 @@ import static io.github.samkelsey.wordzle.model.GameStatus.WON;
 @Service
 public class GuessService {
 
-    private final String SESSION_ATTRIBUTE = "USER_DATA";
     private final ResetTargetWordTask resetTargetWordTask;
 
     public GuessService(ResetTargetWordTask resetTargetWordTask) {
         this.resetTargetWordTask = resetTargetWordTask;
     }
 
-    public ResponseDto makeGuess(HttpSession session, RequestDto dto) {
-        UserData userData = getUserData(session);
+    public ResponseDto makeGuess(UserData userData, RequestDto dto) {
 
         if (isGameOver(userData)) {
             return new ResponseDto(userData);
@@ -43,21 +41,10 @@ public class GuessService {
             userData.setGameStatus(LOST);
         }
 
-        session.setAttribute(SESSION_ATTRIBUTE, userData);
         return new ResponseDto(
                 dto.getGuess().equals(resetTargetWordTask.getTargetWord()),
                 userData
         );
-    }
-
-    private UserData getUserData(HttpSession session) {
-        UserData userData = (UserData) session.getAttribute(SESSION_ATTRIBUTE);
-
-        if (userData == null) {
-            userData = new UserData();
-        }
-
-        return userData;
     }
 
     private boolean isGameOver(UserData userData) {
