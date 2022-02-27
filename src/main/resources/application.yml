@@ -6,5 +6,5 @@ spring:
     database: 0
     port: 6379
 reset-word-task:
-  url: "https://random-word-api.herokuapp.com/word"
-  delay: 100000
+  delay: 300
+  fileLocation: "src/main/resources/wordbank.txt"
