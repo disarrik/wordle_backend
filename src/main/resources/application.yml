@@ -6,5 +6,5 @@ spring:
     database: 0
     port: 6379
 reset-word-task:
-  delay: 300
+  delay: 10000
   fileLocation: "src/main/resources/wordbank.txt"

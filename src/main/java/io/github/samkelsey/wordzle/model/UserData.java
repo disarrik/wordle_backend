@@ -21,12 +21,14 @@ public class UserData implements Serializable {
     private GameStatus gameStatus = PLAYING;
     private List<Guess> guesses = new ArrayList<>();
     private Integer lives = 5;
+    private DiscoveredLetters discoveredLetters = new DiscoveredLetters();
 
     public static UserData fromResponseDto(ResponseDto responseDto) {
         return new UserData(
                 responseDto.getGameStatus(),
                 responseDto.getGuesses(),
-                responseDto.getLives()
+                responseDto.getLives(),
+                responseDto.getDiscoveredLetters()
         );
     }
 

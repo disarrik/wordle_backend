@@ -30,10 +30,11 @@ public class GuessService {
             return new ResponseDto(userData);
         }
 
-        userData.setLives(userData.getLives() - 1);
-
         Guess guessResult = evaluateGuess(dto.getGuess());
+
+        userData.setLives(userData.getLives() - 1);
         userData.getGuesses().add(guessResult);
+        updateDiscoveredLetters(userData, guessResult);
 
         if (dto.getGuess().equals(resetTargetWordTask.getTargetWord())) {
             userData.setGameStatus(WON);
@@ -47,6 +48,29 @@ public class GuessService {
         );
     }
 
+    private void updateDiscoveredLetters(UserData userData, Guess guessResult) {
+        appendUniqueLetters(
+                userData.getDiscoveredLetters().getCorrect(),
+                guessResult.getCorrectAsChars()
+        );
+        appendUniqueLetters(
+                userData.getDiscoveredLetters().getExists(),
+                guessResult.getExistsAsChars()
+        );
+        appendUniqueLetters(
+                userData.getDiscoveredLetters().getIncorrect(),
+                guessResult.getIncorrectAsChars()
+        );
+    }
+
+    private void appendUniqueLetters(List<Character> initialLetters, List<Character> newLetters) {
+        for (char c : newLetters) {
+            if (!initialLetters.contains(c)) {
+                initialLetters.add(c);
+            }
+        }
+    }
+
     private boolean isGameOver(UserData userData) {
         return userData.getGameStatus() == LOST || userData.getGameStatus() == WON;
     }
@@ -56,6 +80,7 @@ public class GuessService {
         char[] guess = s.toCharArray();
 
         List<Integer> correct = new ArrayList<>();
+        List<Integer> incorrect = new ArrayList<>();
         List<Integer> exists = new ArrayList<>();
 
         for (int i = 0; i < target.length; i++) {
@@ -68,8 +93,12 @@ public class GuessService {
                     }
                 }
             }
+
+            if (!correct.contains(i) && !exists.contains(i)) {
+                incorrect.add(i);
+            }
         }
 
-        return new Guess(s, correct, exists);
+        return new Guess(s, correct, incorrect, exists);
     }
 }

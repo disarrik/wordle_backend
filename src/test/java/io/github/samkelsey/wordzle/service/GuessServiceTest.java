@@ -83,6 +83,7 @@ public class GuessServiceTest {
         Guess expected = new Guess(
                 "motfs",
                 Arrays.asList(1, 4),
+                Arrays.asList(0, 2),
                 Arrays.asList(3)
         );
         assertEquals(expected.getGuess(), result.getGuess());
