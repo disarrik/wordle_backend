@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,15 +24,10 @@ public class ResetTargetWordTask {
 
     @Scheduled(fixedDelayString ="${reset-word-task.delay}")
     public void resetWord() {
-        try {
-            LOGGER.info("Resetting word");
-            targetWord = selectWord();
-            targetWordCreationTime = Instant.now().toEpochMilli();
-            LOGGER.info("Target word reset to \"{}\"", targetWord);
-
-        } catch (RestClientException ex) {
-            LOGGER.info("Failed to reset target word. Couldn't reach word api, will try again soon.");
-        }
+        LOGGER.info("Resetting word");
+        targetWord = selectWord();
+        targetWordCreationTime = Instant.now().toEpochMilli();
+        LOGGER.info("Target word reset to \"{}\"", targetWord);
     }
 
     private String selectWord() {
@@ -51,7 +45,7 @@ public class ResetTargetWordTask {
             word = reader.readLine();
             return word;
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("Could not read new word. Setting word to default value.");
         }
 
         return word;
