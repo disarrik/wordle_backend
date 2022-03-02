@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.time.Instant;
 import java.util.Random;
 
@@ -33,7 +36,10 @@ public class ResetTargetWordTask {
     private String selectWord() {
         String word = "grand";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
+            InputStream resourceStream = getClass().getResourceAsStream(fileLocation);
+            InputStreamReader isr = new InputStreamReader(resourceStream);
+            BufferedReader reader = new BufferedReader(isr);
+
             Random rand = new Random();
             int randInt = rand.nextInt(1000);
 

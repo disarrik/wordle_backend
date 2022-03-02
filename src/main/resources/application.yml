@@ -2,9 +2,9 @@ spring:
   session:
     store-type: redis
   redis:
-    host: localhost # set to 'redis' when running as a container.
+    host: redis # set to 'redis' when running as a container.
     database: 0
     port: 6379
 reset-word-task:
-  delay: 10000
-  fileLocation: "src/main/resources/wordbank.txt"
+  delay: 300000
+  fileLocation: "/wordbank.txt"
