@@ -4,6 +4,8 @@ A simple mock of 'definitely not Wordle'.
 
 This repo contains only the backend. To run the full app, follow the quickstart below.
 
+![game screenshot](https://github.com/SamKelsey/wordzle-backend/blob/master/screenshot.jpg?raw=true)
+
 ## Quickstart
 
 1. Clone the [frontend](https://github.com/SamKelsey/wordzle-frontend) repo so both the front and backend repo's are in the same directory. (Eg. `/home/wordle/backend` and `/home/wordle/frontend`).
