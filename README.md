@@ -13,3 +13,9 @@ This repo contains only the backend. To run the full app, follow the quickstart 
 3. Simply, run `docker-compose up` on the backend docker-compose file and visit **Port 5000** :tada:
 
 Have fun!
+
+## Project Architecture
+
+Find below a simple diagram outlining the basic architecture of this project.
+
+![architecture diagram](https://github.com/SamKelsey/wordzle-backend/blob/master/architecture.jpg?raw=true)
