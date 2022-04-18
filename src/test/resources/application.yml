@@ -1,0 +1,10 @@
+spring:
+  session:
+    store-type: redis
+  redis:
+    host: localhost # localhost for embedded redis server.
+    database: 0
+    port: 6379
+reset-word-task:
+  delay: 300000
+  fileLocation: "/wordbank.txt"
