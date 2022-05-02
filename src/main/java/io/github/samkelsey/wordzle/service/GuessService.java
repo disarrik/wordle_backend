@@ -29,6 +29,7 @@ public class GuessService {
         this.userDataRepository = userDataRepository;
     }
 
+    //todo вынсти поиск пользователя в отдельный приватный метод
     @Transactional
     public UserData getStats(String userId, String chatId) {
         Optional<UserData> optionalUserData = userDataRepository.findById(new UserDataPK(userId, chatId));
