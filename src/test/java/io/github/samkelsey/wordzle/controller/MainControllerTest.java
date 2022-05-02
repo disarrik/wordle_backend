@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static io.github.samkelsey.wordzle.model.GameStatus.PLAYING;
+import static io.github.samkelsey.wordzle.entity.GameStatus.PLAYING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;

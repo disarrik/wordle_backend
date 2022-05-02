@@ -1,4 +1,4 @@
-package io.github.samkelsey.wordzle.model;
+package io.github.samkelsey.wordzle.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

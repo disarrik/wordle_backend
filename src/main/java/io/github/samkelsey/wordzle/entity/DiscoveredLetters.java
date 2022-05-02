@@ -1,8 +1,9 @@
-package io.github.samkelsey.wordzle.model;
+package io.github.samkelsey.wordzle.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

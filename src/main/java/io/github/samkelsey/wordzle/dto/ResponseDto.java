@@ -3,10 +3,10 @@ package io.github.samkelsey.wordzle.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.samkelsey.wordzle.model.DiscoveredLetters;
-import io.github.samkelsey.wordzle.model.GameStatus;
-import io.github.samkelsey.wordzle.model.Guess;
-import io.github.samkelsey.wordzle.model.UserData;
+import io.github.samkelsey.wordzle.entity.DiscoveredLetters;
+import io.github.samkelsey.wordzle.entity.GameStatus;
+import io.github.samkelsey.wordzle.entity.Guess;
+import io.github.samkelsey.wordzle.entity.UserData;
 import lombok.Getter;
 import lombok.Setter;
 

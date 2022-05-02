@@ -2,7 +2,7 @@ package io.github.samkelsey.wordzle.controller;
 
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
-import io.github.samkelsey.wordzle.model.UserData;
+import io.github.samkelsey.wordzle.entity.UserData;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
 import io.github.samkelsey.wordzle.service.GuessService;
 import org.slf4j.Logger;
@@ -41,8 +41,8 @@ public class MainController {
         LOGGER.info("Processing request for a guess of: {}", dto.getGuess());
         UserData userData = getUserData(request);
         ResponseDto response = guessService.makeGuess(userData, dto);
-        setUserData(request.getSession(), UserData.fromResponseDto(response));
-        return ResponseEntity.ok(response);
+        //setUserData(request.getSession(), UserData.fromResponseDto(response));
+        return ResponseEntity.ok(null);
     }
 
     private UserData getUserData(HttpServletRequest request) {

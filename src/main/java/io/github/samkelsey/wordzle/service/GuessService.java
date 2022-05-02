@@ -1,19 +1,17 @@
 package io.github.samkelsey.wordzle.service;
 
-import io.github.samkelsey.wordzle.model.Guess;
-import io.github.samkelsey.wordzle.model.UserData;
+import io.github.samkelsey.wordzle.entity.Guess;
+import io.github.samkelsey.wordzle.entity.UserData;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.samkelsey.wordzle.model.GameStatus.LOST;
-import static io.github.samkelsey.wordzle.model.GameStatus.WON;
+import static io.github.samkelsey.wordzle.entity.GameStatus.LOST;
+import static io.github.samkelsey.wordzle.entity.GameStatus.WON;
 
 @Service
 public class GuessService {
@@ -24,6 +22,7 @@ public class GuessService {
         this.resetTargetWordTask = resetTargetWordTask;
     }
 
+    //todo: userData -> user_id, chat_id
     public ResponseDto makeGuess(UserData userData, RequestDto dto) {
 
         if (isGameOver(userData)) {
@@ -38,6 +37,7 @@ public class GuessService {
 
         if (dto.getGuess().equals(resetTargetWordTask.getTargetWord())) {
             userData.setGameStatus(WON);
+
         } else if (userData.getLives() <= 0) {
             userData.setGameStatus(LOST);
         }

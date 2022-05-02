@@ -1,5 +1,6 @@
 package io.github.samkelsey.wordzle.model;
 
+import io.github.samkelsey.wordzle.entity.Guess;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

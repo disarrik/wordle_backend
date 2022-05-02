@@ -1,4 +1,4 @@
-package io.github.samkelsey.wordzle.model;
+package io.github.samkelsey.wordzle.entity;
 
 public enum GameStatus {
 

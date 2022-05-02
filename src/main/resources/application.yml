@@ -5,6 +5,14 @@ spring:
     host: host.docker.internal # set to 'redis' when running as a container and 'host.docker.internal' when locally.
     database: 0
     port: 6379
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
 reset-word-task:
   delay: 300000
   fileLocation: "/wordbank.txt"

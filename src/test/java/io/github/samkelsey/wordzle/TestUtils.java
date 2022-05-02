@@ -2,15 +2,14 @@ package io.github.samkelsey.wordzle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flextrade.jfixture.JFixture;
-import io.github.samkelsey.wordzle.dto.ResponseDto;
-import io.github.samkelsey.wordzle.model.Guess;
-import io.github.samkelsey.wordzle.model.UserData;
+import io.github.samkelsey.wordzle.entity.Guess;
+import io.github.samkelsey.wordzle.entity.UserData;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.samkelsey.wordzle.model.GameStatus.PLAYING;
+import static io.github.samkelsey.wordzle.entity.GameStatus.PLAYING;
 
 public class TestUtils {
 
