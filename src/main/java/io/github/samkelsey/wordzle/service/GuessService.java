@@ -4,11 +4,16 @@ import io.github.samkelsey.wordzle.entity.Guess;
 import io.github.samkelsey.wordzle.entity.UserData;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
+import io.github.samkelsey.wordzle.entity.UserDataPK;
+import io.github.samkelsey.wordzle.repository.UserDataRepository;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static io.github.samkelsey.wordzle.entity.GameStatus.LOST;
 import static io.github.samkelsey.wordzle.entity.GameStatus.WON;
@@ -17,13 +22,32 @@ import static io.github.samkelsey.wordzle.entity.GameStatus.WON;
 public class GuessService {
 
     private final ResetTargetWordTask resetTargetWordTask;
+    private final UserDataRepository userDataRepository;
 
-    public GuessService(ResetTargetWordTask resetTargetWordTask) {
+    public GuessService(ResetTargetWordTask resetTargetWordTask, UserDataRepository userDataRepository) {
         this.resetTargetWordTask = resetTargetWordTask;
+        this.userDataRepository = userDataRepository;
     }
 
-    //todo: userData -> user_id, chat_id
-    public ResponseDto makeGuess(UserData userData, RequestDto dto) {
+    @Transactional
+    public UserData getStats(String userId, String chatId) {
+        Optional<UserData> optionalUserData = userDataRepository.findById(new UserDataPK(userId, chatId));
+        if (optionalUserData.isEmpty()){
+            return userDataRepository.save(new UserData(new UserDataPK(userId, chatId)));
+        }
+        return optionalUserData.get();
+    }
+
+    @Transactional
+    public ResponseDto makeGuess(String userId, String chatId, RequestDto dto) {
+        UserData userData;
+        Optional<UserData> optionalUserData = userDataRepository.findById(new UserDataPK(userId, chatId));
+        if (optionalUserData.isEmpty()){
+            userData =  userDataRepository.save(new UserData(new UserDataPK(userId, chatId)));
+        }
+        else {
+            userData = optionalUserData.get();
+        }
 
         if (isGameOver(userData)) {
             return new ResponseDto(userData);

@@ -13,6 +13,7 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create
+    show-sql: true
 reset-word-task:
   delay: 300000
   fileLocation: "/wordbank.txt"

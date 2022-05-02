@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.ElementCollection;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.FetchType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +25,12 @@ public class UserData implements Serializable {
     @EmbeddedId
     private UserDataPK userDataPK;
     private GameStatus gameStatus = PLAYING;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Guess> guesses = new ArrayList<>();
     private Integer lives = 5;
     private DiscoveredLetters discoveredLetters = new DiscoveredLetters();
 
-/*    public static UserData fromResponseDto(ResponseDto responseDto) {
-        return new UserData(
-                responseDto.getGameStatus(),
-                responseDto.getGuesses(),
-                responseDto.getLives(),
-                responseDto.getDiscoveredLetters()
-        );
-    }*/
-
+    public UserData(UserDataPK userDataPK) {
+        this.userDataPK = userDataPK;
+    }
 }
