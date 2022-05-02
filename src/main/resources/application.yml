@@ -1,10 +1,4 @@
 spring:
-  session:
-    store-type: redis
-  redis:
-    host: host.docker.internal # set to 'redis' when running as a container and 'host.docker.internal' when locally.
-    database: 0
-    port: 6379
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
