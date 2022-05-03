@@ -1,19 +1,21 @@
 package io.github.samkelsey.wordzle.service;
 
-import io.github.samkelsey.wordzle.entity.Guess;
-import io.github.samkelsey.wordzle.entity.UserData;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
+import io.github.samkelsey.wordzle.entity.Guess;
+import io.github.samkelsey.wordzle.entity.UserData;
 import io.github.samkelsey.wordzle.entity.UserDataPK;
 import io.github.samkelsey.wordzle.repository.UserDataRepository;
 import io.github.samkelsey.wordzle.schedule.ResetTargetWordTask;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.games.GameHighScore;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static io.github.samkelsey.wordzle.entity.GameStatus.LOST;
 import static io.github.samkelsey.wordzle.entity.GameStatus.WON;
@@ -23,17 +25,19 @@ public class GuessService {
 
     private final ResetTargetWordTask resetTargetWordTask;
     private final UserDataRepository userDataRepository;
+    private final String token;
 
-    public GuessService(ResetTargetWordTask resetTargetWordTask, UserDataRepository userDataRepository) {
+    public GuessService(ResetTargetWordTask resetTargetWordTask, UserDataRepository userDataRepository, @Value("${bot.token}") String token) {
         this.resetTargetWordTask = resetTargetWordTask;
         this.userDataRepository = userDataRepository;
+        this.token = token;
     }
 
     //todo вынсти поиск пользователя в отдельный приватный метод
     @Transactional
     public UserData getStats(String userId, String chatId) {
         Optional<UserData> optionalUserData = userDataRepository.findById(new UserDataPK(userId, chatId));
-        if (optionalUserData.isEmpty()){
+        if (optionalUserData.isEmpty()) {
             return userDataRepository.save(new UserData(new UserDataPK(userId, chatId)));
         }
         return optionalUserData.get();
@@ -43,10 +47,9 @@ public class GuessService {
     public ResponseDto makeGuess(String userId, String chatId, RequestDto dto) {
         UserData userData;
         Optional<UserData> optionalUserData = userDataRepository.findById(new UserDataPK(userId, chatId));
-        if (optionalUserData.isEmpty()){
-            userData =  userDataRepository.save(new UserData(new UserDataPK(userId, chatId)));
-        }
-        else {
+        if (optionalUserData.isEmpty()) {
+            userData = userDataRepository.save(new UserData(new UserDataPK(userId, chatId)));
+        } else {
             userData = optionalUserData.get();
         }
 
@@ -62,6 +65,17 @@ public class GuessService {
 
         if (dto.getGuess().equals(resetTargetWordTask.getTargetWord())) {
             userData.setGameStatus(WON);
+            RestTemplate restTemplate = new RestTemplate();
+            String botUrlGetScore = "https://api.telegram.org/bot" + token + "/getGameHighScores";
+            String botUrlSetScore = "https://api.telegram.org/bot" + token + "/setGameHighScores";
+            GameHighScore[] gameHighScores = restTemplate.getForObject(botUrlGetScore, GameHighScore[].class, Map.of("user_id", userId, "chat_id", chatId));
+            for(GameHighScore gameHighScore:gameHighScores){
+                if(Long.parseLong(userId) == gameHighScore.getUser().getId()){
+                    int score=gameHighScore.getScore() + userData.getLives();
+                    restTemplate.getForEntity(botUrlSetScore, Message.class, Map.of("user_id", userId, "chat_id", chatId, "score", score));
+                }
+            }
+
 
         } else if (userData.getLives() <= 0) {
             userData.setGameStatus(LOST);

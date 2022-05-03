@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/postgres # 'postgres' if running with compose
+    url: jdbc:postgresql://localhost:5432/postgres # 'postgres' if running with compose
     username: postgres
     password: postgres
   jpa:
@@ -11,3 +11,7 @@ spring:
 reset-word-task:
   delay: 300000
   fileLocation: "/wordbank.txt"
+
+bot:
+  name: wordle
+  token: ${telegram_api_token_wordle}
