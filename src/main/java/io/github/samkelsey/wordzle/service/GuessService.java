@@ -1,5 +1,6 @@
 package io.github.samkelsey.wordzle.service;
 
+import io.github.samkelsey.wordzle.dto.GameScoreDTO;
 import io.github.samkelsey.wordzle.dto.RequestDto;
 import io.github.samkelsey.wordzle.dto.ResponseDto;
 import io.github.samkelsey.wordzle.entity.Guess;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.games.GameHighScore;
 
@@ -67,12 +69,24 @@ public class GuessService {
             userData.setGameStatus(WON);
             RestTemplate restTemplate = new RestTemplate();
             String botUrlGetScore = "https://api.telegram.org/bot" + token + "/getGameHighScores";
-            String botUrlSetScore = "https://api.telegram.org/bot" + token + "/setGameHighScores";
-            GameHighScore[] gameHighScores = restTemplate.getForObject(botUrlGetScore, GameHighScore[].class, Map.of("user_id", userId, "chat_id", chatId));
-            for(GameHighScore gameHighScore:gameHighScores){
+            String botUrlSetScore = "https://api.telegram.org/bot" + token + "/setGameScore";
+            System.out.println(userId);
+            System.out.println(chatId);
+
+
+            UriComponentsBuilder uriGetScore = UriComponentsBuilder.fromHttpUrl(botUrlGetScore)
+                    .queryParam("user_id", userId)
+                    .queryParam("inline_message_id", chatId);
+            ResponseEntity<GameScoreDTO> gameHighScores = restTemplate.getForEntity(uriGetScore.toUriString(), GameScoreDTO.class);
+
+            for(GameHighScore gameHighScore:gameHighScores.getBody().getResult()){
                 if(Long.parseLong(userId) == gameHighScore.getUser().getId()){
                     int score=gameHighScore.getScore() + userData.getLives();
-                    restTemplate.getForEntity(botUrlSetScore, Message.class, Map.of("user_id", userId, "chat_id", chatId, "score", score));
+                    UriComponentsBuilder uriSetScore = UriComponentsBuilder.fromHttpUrl(botUrlSetScore)
+                            .queryParam("user_id", userId)
+                            .queryParam("inline_message_id", chatId)
+                            .queryParam("score", score);
+                    restTemplate.getForEntity(uriSetScore.toUriString(), String.class);
                 }
             }
 
