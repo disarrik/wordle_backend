@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres # 'postgres' if running with compose
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DB} # 'postgres' if running with compose
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     generate-ddl: true
     hibernate:
