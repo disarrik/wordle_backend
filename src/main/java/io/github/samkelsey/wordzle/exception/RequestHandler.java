@@ -12,6 +12,9 @@ import java.util.TreeSet;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+/**
+ * A {@link ControllerAdvice} annotated class that contains all game's exception handlers
+ */
 @ControllerAdvice
 public class RequestHandler {
 

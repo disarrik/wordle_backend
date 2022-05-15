@@ -28,6 +28,9 @@ public class MainController {
     }
 
 
+    /**
+     * Return stats of the user with {@code userId} in chat with {@code userId}
+     */
     @GetMapping("/getStats")
     public ResponseEntity<ResponseDto> getStats(@RequestParam("user_id") String userId,
                                                 @RequestParam("chat_id") String chatId) {
@@ -35,6 +38,9 @@ public class MainController {
         return ResponseEntity.ok().body(new ResponseDto(userData));
     }
 
+    /**
+     * Make a guess for {@code userId} in {@code chatId} and return his updated stats
+     */
     @PostMapping(value = "/submitGuess")
     public ResponseEntity<ResponseDto> submitGuess(@RequestParam("user_id") String userId,
                                                    @RequestParam("chat_id") String chatId,

@@ -30,6 +30,9 @@ public class ResetTargetWordTask {
         this.userDataRepository = userDataRepository;
     }
 
+    /**
+     * Scheduled method that is invoked to change the word in tha game
+     */
     @Scheduled(fixedDelayString ="${reset-word-task.delay}")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void resetWord() {

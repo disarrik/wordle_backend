@@ -22,6 +22,9 @@ import java.util.*;
 import static io.github.samkelsey.wordzle.entity.GameStatus.LOST;
 import static io.github.samkelsey.wordzle.entity.GameStatus.WON;
 
+/**
+ * A Service that contains all methods with business logic
+ */
 @Service
 public class GuessService {
 
@@ -35,7 +38,9 @@ public class GuessService {
         this.token = token;
     }
 
-    //todo вынсти поиск пользователя в отдельный приватный метод
+    /**
+     * Return {@link UserData} that contains current stats of the user
+     */
     @Transactional
     public UserData getStats(String userId, String chatId) {
         Optional<UserData> optionalUserData = userDataRepository.findById(new UserDataPK(userId, chatId));
@@ -45,6 +50,10 @@ public class GuessService {
         return optionalUserData.get();
     }
 
+    /**
+     * Make a guess and return the changed stats of the user
+     * @param dto {@link RequestDto} the request from the user that is making the current guess
+     */
     @Transactional
     public ResponseDto makeGuess(String userId, String chatId, RequestDto dto) {
         UserData userData;

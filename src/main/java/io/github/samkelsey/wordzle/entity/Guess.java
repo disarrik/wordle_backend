@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A model class that contains all guesses result
+ */
 @Getter
 @Setter
 @AllArgsConstructor
