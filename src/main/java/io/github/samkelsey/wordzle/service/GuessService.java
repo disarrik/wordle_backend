@@ -110,6 +110,9 @@ public class GuessService {
         );
     }
 
+    /**
+     * A private method that changes {@link UserData} according to the current {@link Guess}
+     */
     private void updateDiscoveredLetters(UserData userData, Guess guessResult) {
         appendUniqueLetters(
                 userData.getDiscoveredLetters().getCorrect(),
@@ -137,6 +140,11 @@ public class GuessService {
         return userData.getGameStatus() == LOST || userData.getGameStatus() == WON;
     }
 
+    /**
+     * Private method that forms the {@link Guess} according to the sent word
+     * @param s sent word
+     * @return formed {@link Guess} according to the sent word
+     */
     private Guess evaluateGuess(String s) {
         char[] target = resetTargetWordTask.getTargetWord().toCharArray();
         char[] guess = s.toCharArray();

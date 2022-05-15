@@ -16,6 +16,9 @@ import java.io.InputStreamReader;
 import java.time.Instant;
 import java.util.Random;
 
+/**
+ * A class with scheduled method
+ */
 @Component
 public class ResetTargetWordTask {
 

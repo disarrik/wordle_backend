@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * Controller with all endpoint of the game
+ */
 @RestController
 public class MainController {
 

@@ -15,6 +15,10 @@ import java.util.List;
 
 import static io.github.samkelsey.wordzle.entity.GameStatus.PLAYING;
 
+
+/**
+ * The user's info stored in database
+ */
 @Getter
 @Setter
 @AllArgsConstructor
